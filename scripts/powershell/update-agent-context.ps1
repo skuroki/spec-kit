@@ -134,7 +134,7 @@ function Extract-PlanField {
     Get-Content -LiteralPath $PlanFile -Encoding utf8 | ForEach-Object {
         if ($_ -match $regex) { 
             $val = $Matches[1].Trim()
-            if ($val -notin @('NEEDS CLARIFICATION','N/A')) { return $val }
+            if ($val -notin @('NEEDS CLARIFICATION','N/A','明確化が必要')) { return $val }
         }
     } | Select-Object -First 1
 }
@@ -146,10 +146,18 @@ function Parse-PlanData {
     )
     if (-not (Test-Path $PlanFile)) { Write-Err "Plan file not found: $PlanFile"; return $false }
     Write-Info "Parsing plan data from $PlanFile"
+    
     $script:NEW_LANG        = Extract-PlanField -FieldPattern 'Language/Version' -PlanFile $PlanFile
+    if (-not $script:NEW_LANG) { $script:NEW_LANG = Extract-PlanField -FieldPattern '言語/バージョン' -PlanFile $PlanFile }
+    
     $script:NEW_FRAMEWORK   = Extract-PlanField -FieldPattern 'Primary Dependencies' -PlanFile $PlanFile
+    if (-not $script:NEW_FRAMEWORK) { $script:NEW_FRAMEWORK = Extract-PlanField -FieldPattern '主要な依存関係' -PlanFile $PlanFile }
+    
     $script:NEW_DB          = Extract-PlanField -FieldPattern 'Storage' -PlanFile $PlanFile
+    if (-not $script:NEW_DB) { $script:NEW_DB = Extract-PlanField -FieldPattern 'ストレージ' -PlanFile $PlanFile }
+    
     $script:NEW_PROJECT_TYPE = Extract-PlanField -FieldPattern 'Project Type' -PlanFile $PlanFile
+    if (-not $script:NEW_PROJECT_TYPE) { $script:NEW_PROJECT_TYPE = Extract-PlanField -FieldPattern 'プロジェクトタイプ' -PlanFile $PlanFile }
 
     if ($NEW_LANG) { Write-Info "Found language: $NEW_LANG" } else { Write-WarningMsg 'No language information found in plan' }
     if ($NEW_FRAMEWORK) { Write-Info "Found framework: $NEW_FRAMEWORK" }
@@ -166,8 +174,8 @@ function Format-TechnologyStack {
         [string]$Framework
     )
     $parts = @()
-    if ($Lang -and $Lang -ne 'NEEDS CLARIFICATION') { $parts += $Lang }
-    if ($Framework -and $Framework -notin @('NEEDS CLARIFICATION','N/A')) { $parts += $Framework }
+    if ($Lang -and $Lang -notin @('NEEDS CLARIFICATION', '明確化が必要')) { $parts += $Lang }
+    if ($Framework -and $Framework -notin @('NEEDS CLARIFICATION','N/A', '明確化が必要')) { $parts += $Framework }
     if (-not $parts) { return '' }
     return ($parts -join ' + ')
 }

@@ -163,6 +163,7 @@ extract_plan_field() {
         sed "s|^\*\*${field_pattern}\*\*: ||" | \
         sed 's/^[ \t]*//;s/[ \t]*$//' | \
         grep -v "NEEDS CLARIFICATION" | \
+        grep -v "明確化が必要" | \
         grep -v "^N/A$" || echo ""
 }
 
@@ -181,10 +182,18 @@ parse_plan_data() {
     
     log_info "Parsing plan data from $plan_file"
     
+    # Try English keys first, then Japanese keys
     NEW_LANG=$(extract_plan_field "Language/Version" "$plan_file")
+    [[ -z "$NEW_LANG" ]] && NEW_LANG=$(extract_plan_field "言語/バージョン" "$plan_file")
+
     NEW_FRAMEWORK=$(extract_plan_field "Primary Dependencies" "$plan_file")
+    [[ -z "$NEW_FRAMEWORK" ]] && NEW_FRAMEWORK=$(extract_plan_field "主要な依存関係" "$plan_file")
+
     NEW_DB=$(extract_plan_field "Storage" "$plan_file")
+    [[ -z "$NEW_DB" ]] && NEW_DB=$(extract_plan_field "ストレージ" "$plan_file")
+
     NEW_PROJECT_TYPE=$(extract_plan_field "Project Type" "$plan_file")
+    [[ -z "$NEW_PROJECT_TYPE" ]] && NEW_PROJECT_TYPE=$(extract_plan_field "プロジェクトタイプ" "$plan_file")
     
     # Log what we found
     if [[ -n "$NEW_LANG" ]]; then
@@ -212,8 +221,8 @@ format_technology_stack() {
     local parts=()
     
     # Add non-empty parts
-    [[ -n "$lang" && "$lang" != "NEEDS CLARIFICATION" ]] && parts+=("$lang")
-    [[ -n "$framework" && "$framework" != "NEEDS CLARIFICATION" && "$framework" != "N/A" ]] && parts+=("$framework")
+    [[ -n "$lang" && "$lang" != "NEEDS CLARIFICATION" && "$lang" != "明確化が必要" ]] && parts+=("$lang")
+    [[ -n "$framework" && "$framework" != "NEEDS CLARIFICATION" && "$framework" != "明確化が必要" && "$framework" != "N/A" ]] && parts+=("$framework")
     
     # Join with proper formatting
     if [[ ${#parts[@]} -eq 0 ]]; then
