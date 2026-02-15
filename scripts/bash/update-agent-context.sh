@@ -457,7 +457,7 @@ update_existing_agent_file() {
         fi
         
         # Handle Recent Changes section
-        if [[ "$line" == "## Recent Changes" ]] || [[ "$line" == "## 最近の変更 (Recent Changes)" ]] || [[ "$line" == "## Recent Changes" ]]; then
+        if [[ "$line" == "## Recent Changes" ]] || [[ "$line" == "## 最近の変更 (Recent Changes)" ]]; then
             echo "$line" >> "$temp_file"
             # Add new change entry right after the heading
             if [[ -n "$new_change_entry" ]]; then
