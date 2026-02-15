@@ -96,10 +96,10 @@ tasks.md は即座に実行可能であるべきです - 各タスクはLLMが�
 
 **例**:
 
-- ✅ 正解: `- [ ] T001 実装計画に従ってプロジェクト構造を作成 [scripts/setup.sh]`
-- ✅ 正解: `- [ ] T005 [P] 認証ミドルウェアを実装 [src/middleware/auth.py]`
-- ✅ 正解: `- [ ] T012 [P] [US1] Userモデルを作成 [src/models/user.py]`
-- ✅ 正解: `- [ ] T014 [US1] UserServiceを実装 [src/services/user_service.py]`
+- ✅ 正解: `- [ ] T001 実装計画に従ってプロジェクト構造を作成 scripts/setup.sh`
+- ✅ 正解: `- [ ] T005 [P] 認証ミドルウェアを実装 src/middleware/auth.py`
+- ✅ 正解: `- [ ] T012 [P] [US1] Userモデルを作成 src/models/user.py`
+- ✅ 正解: `- [ ] T014 [US1] UserServiceを実装 src/services/user_service.py`
 - ❌ 間違い: `- [ ] Userモデルを作成` (IDとストーリーラベル欠落)
 - ❌ 間違い: `T001 [US1] モデルを作成` (チェックボックス欠落)
 - ❌ 間違い: `- [ ] [US1] Userモデルを作成` (タスクID欠落)
