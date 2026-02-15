@@ -408,11 +408,15 @@ update_existing_agent_file() {
     local has_active_technologies=0
     local has_recent_changes=0
     
-    if grep -q "^## Active Technologies" "$target_file" 2>/dev/null; then
+    if grep -q "^## 使用技術 (Active Technologies)" "$target_file" 2>/dev/null; then
+        has_active_technologies=1
+    elif grep -q "^## Active Technologies" "$target_file" 2>/dev/null; then
         has_active_technologies=1
     fi
     
-    if grep -q "^## Recent Changes" "$target_file" 2>/dev/null; then
+    if grep -q "^## 最近の変更 (Recent Changes)" "$target_file" 2>/dev/null; then
+        has_recent_changes=1
+    elif grep -q "^## Recent Changes" "$target_file" 2>/dev/null; then
         has_recent_changes=1
     fi
     
@@ -426,7 +430,7 @@ update_existing_agent_file() {
     
     while IFS= read -r line || [[ -n "$line" ]]; do
         # Handle Active Technologies section
-        if [[ "$line" == "## Active Technologies" ]]; then
+        if [[ "$line" == "## Active Technologies" ]] || [[ "$line" == "## 使用技術 (Active Technologies)" ]]; then
             echo "$line" >> "$temp_file"
             in_tech_section=true
             continue
@@ -450,7 +454,7 @@ update_existing_agent_file() {
         fi
         
         # Handle Recent Changes section
-        if [[ "$line" == "## Recent Changes" ]]; then
+        if [[ "$line" == "## Recent Changes" ]] || [[ "$line" == "## 最近の変更 (Recent Changes)" ]] || [[ "$line" == "## Recent Changes" ]]; then
             echo "$line" >> "$temp_file"
             # Add new change entry right after the heading
             if [[ -n "$new_change_entry" ]]; then
@@ -489,14 +493,14 @@ update_existing_agent_file() {
     # If sections don't exist, add them at the end of the file
     if [[ $has_active_technologies -eq 0 ]] && [[ ${#new_tech_entries[@]} -gt 0 ]]; then
         echo "" >> "$temp_file"
-        echo "## Active Technologies" >> "$temp_file"
+        echo "## 使用技術 (Active Technologies)" >> "$temp_file"
         printf '%s\n' "${new_tech_entries[@]}" >> "$temp_file"
         tech_entries_added=true
     fi
     
     if [[ $has_recent_changes -eq 0 ]] && [[ -n "$new_change_entry" ]]; then
         echo "" >> "$temp_file"
-        echo "## Recent Changes" >> "$temp_file"
+        echo "## 最近の変更 (Recent Changes)" >> "$temp_file"
         echo "$new_change_entry" >> "$temp_file"
         changes_entries_added=true
     fi

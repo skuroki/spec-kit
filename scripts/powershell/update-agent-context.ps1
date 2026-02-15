@@ -306,34 +306,55 @@ function Update-ExistingAgentFile {
 
     for ($i=0; $i -lt $lines.Count; $i++) {
         $line = $lines[$i]
-        if ($line -eq '## Active Technologies') {
+        
+        # Handle Active Technologies Section
+        if ($line -eq '## Active Technologies' -or $line -eq '## 使用技術 (Active Technologies)') {
             $output.Add($line)
             $inTech = $true
+            # Add new tech entries right after header
+            if (-not $techAdded -and $newTechEntries.Count -gt 0) { 
+                $newTechEntries | ForEach-Object { $output.Add($_) }
+                $techAdded = $true 
+            }
             continue
         }
-        if ($inTech -and $line -match '^##\s') {
-            if (-not $techAdded -and $newTechEntries.Count -gt 0) { $newTechEntries | ForEach-Object { $output.Add($_) }; $techAdded = $true }
-            $output.Add($line); $inTech = $false; continue
+        
+        if ($inTech -and ($line -match '^##\s' -or [string]::IsNullOrWhiteSpace($line))) {
+            $inTech = $false
         }
-        if ($inTech -and [string]::IsNullOrWhiteSpace($line)) {
-            if (-not $techAdded -and $newTechEntries.Count -gt 0) { $newTechEntries | ForEach-Object { $output.Add($_) }; $techAdded = $true }
-            $output.Add($line); continue
-        }
-        if ($line -eq '## Recent Changes') {
+        
+        # Handle Recent Changes Section
+        if ($line -eq '## Recent Changes' -or $line -eq '## 最近の変更 (Recent Changes)') {
             $output.Add($line)
-            if ($newChangeEntry) { $output.Add($newChangeEntry); $changeAdded = $true }
+            if ($newChangeEntry) { 
+                $output.Add($newChangeEntry)
+                $changeAdded = $true 
+            }
             $inChanges = $true
             continue
         }
-        if ($inChanges -and $line -match '^##\s') { $output.Add($line); $inChanges = $false; continue }
-        if ($inChanges -and $line -match '^- ') {
-            if ($existingChanges -lt 2) { $output.Add($line); $existingChanges++ }
+        
+        if ($inChanges -and $line -match '^##\s') {
+            $inChanges = $false
+            $output.Add($line)
             continue
         }
+        
+        if ($inChanges -and $line -match '^- ') {
+             if ($existingChanges -lt 2) {
+                 $output.Add($line)
+                 $existingChanges++
+             }
+             continue
+        }
+        
         if ($line -match '\*\*Last updated\*\*: .*\d{4}-\d{2}-\d{2}') {
             $output.Add(($line -replace '\d{4}-\d{2}-\d{2}',$Date.ToString('yyyy-MM-dd')))
             continue
         }
+        
+        # Skip lines if we already added tech entries and are inside the tech block (avoid duplication potential if logic was different)
+        # But here we just add the line if not special case
         $output.Add($line)
     }
 
