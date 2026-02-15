@@ -18,7 +18,7 @@
 
 ## コードスタイル
 
-[LANGUAGE-SPECIFIC, ONLY FOR LANGUAGES IN USE]
+[LANGUAGE-SPECIFIC, ONLY FOR LANGUAGES IN USE] (使用中の言語に固有)
 
 ## Recent Changes
 
