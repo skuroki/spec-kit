@@ -134,7 +134,7 @@ function Extract-PlanField {
     Get-Content -LiteralPath $PlanFile -Encoding utf8 | ForEach-Object {
         if ($_ -match $regex) { 
             $val = $Matches[1].Trim()
-            if ($val -notin @('NEEDS CLARIFICATION','N/A')) { return $val }
+            if ($val -notin @('NEEDS CLARIFICATION','N/A','明確化が必要')) { return $val }
         }
     } | Select-Object -First 1
 }
@@ -146,10 +146,18 @@ function Parse-PlanData {
     )
     if (-not (Test-Path $PlanFile)) { Write-Err "Plan file not found: $PlanFile"; return $false }
     Write-Info "Parsing plan data from $PlanFile"
+    
     $script:NEW_LANG        = Extract-PlanField -FieldPattern 'Language/Version' -PlanFile $PlanFile
+    if (-not $script:NEW_LANG) { $script:NEW_LANG = Extract-PlanField -FieldPattern '言語/バージョン' -PlanFile $PlanFile }
+    
     $script:NEW_FRAMEWORK   = Extract-PlanField -FieldPattern 'Primary Dependencies' -PlanFile $PlanFile
+    if (-not $script:NEW_FRAMEWORK) { $script:NEW_FRAMEWORK = Extract-PlanField -FieldPattern '主要な依存関係' -PlanFile $PlanFile }
+    
     $script:NEW_DB          = Extract-PlanField -FieldPattern 'Storage' -PlanFile $PlanFile
+    if (-not $script:NEW_DB) { $script:NEW_DB = Extract-PlanField -FieldPattern 'ストレージ' -PlanFile $PlanFile }
+    
     $script:NEW_PROJECT_TYPE = Extract-PlanField -FieldPattern 'Project Type' -PlanFile $PlanFile
+    if (-not $script:NEW_PROJECT_TYPE) { $script:NEW_PROJECT_TYPE = Extract-PlanField -FieldPattern 'プロジェクトタイプ' -PlanFile $PlanFile }
 
     if ($NEW_LANG) { Write-Info "Found language: $NEW_LANG" } else { Write-WarningMsg 'No language information found in plan' }
     if ($NEW_FRAMEWORK) { Write-Info "Found framework: $NEW_FRAMEWORK" }
@@ -166,8 +174,8 @@ function Format-TechnologyStack {
         [string]$Framework
     )
     $parts = @()
-    if ($Lang -and $Lang -ne 'NEEDS CLARIFICATION') { $parts += $Lang }
-    if ($Framework -and $Framework -notin @('NEEDS CLARIFICATION','N/A')) { $parts += $Framework }
+    if ($Lang -and $Lang -notin @('NEEDS CLARIFICATION', '明確化が必要')) { $parts += $Lang }
+    if ($Framework -and $Framework -notin @('NEEDS CLARIFICATION','N/A', '明確化が必要')) { $parts += $Framework }
     if (-not $parts) { return '' }
     return ($parts -join ' + ')
 }
@@ -237,11 +245,17 @@ function New-AgentFile {
     }
     
     $content = $content -replace '\[EXTRACTED FROM ALL PLAN.MD FILES\]',$techStackForTemplate
+    $content = $content -replace '\[すべての plan.md ファイルから抽出\]',$techStackForTemplate
+    
     # For project structure we manually embed (keep newlines)
     $escapedStructure = [Regex]::Escape($projectStructure)
     $content = $content -replace '\[ACTUAL STRUCTURE FROM PLANS\]',$escapedStructure
+    $content = $content -replace '\[計画からの実際の構造\]',$escapedStructure
+
     # Replace escaped newlines placeholder after all replacements
     $content = $content -replace '\[ONLY COMMANDS FOR ACTIVE TECHNOLOGIES\]',$commands
+    $content = $content -replace '\[使用技術に関連するコマンドのみ\]',$commands
+
     $content = $content -replace '\[LANGUAGE-SPECIFIC, ONLY FOR LANGUAGES IN USE\]',$languageConventions
     
     # Build the recent changes string safely
@@ -298,34 +312,55 @@ function Update-ExistingAgentFile {
 
     for ($i=0; $i -lt $lines.Count; $i++) {
         $line = $lines[$i]
-        if ($line -eq '## Active Technologies') {
+        
+        # Handle Active Technologies Section
+        if ($line -eq '## Active Technologies' -or $line -eq '## 使用技術 (Active Technologies)') {
             $output.Add($line)
             $inTech = $true
+            # Add new tech entries right after header
+            if (-not $techAdded -and $newTechEntries.Count -gt 0) { 
+                $newTechEntries | ForEach-Object { $output.Add($_) }
+                $techAdded = $true 
+            }
             continue
         }
-        if ($inTech -and $line -match '^##\s') {
-            if (-not $techAdded -and $newTechEntries.Count -gt 0) { $newTechEntries | ForEach-Object { $output.Add($_) }; $techAdded = $true }
-            $output.Add($line); $inTech = $false; continue
+        
+        if ($inTech -and ($line -match '^##\s' -or [string]::IsNullOrWhiteSpace($line))) {
+            $inTech = $false
         }
-        if ($inTech -and [string]::IsNullOrWhiteSpace($line)) {
-            if (-not $techAdded -and $newTechEntries.Count -gt 0) { $newTechEntries | ForEach-Object { $output.Add($_) }; $techAdded = $true }
-            $output.Add($line); continue
-        }
-        if ($line -eq '## Recent Changes') {
+        
+        # Handle Recent Changes Section
+        if ($line -eq '## Recent Changes' -or $line -eq '## 最近の変更 (Recent Changes)') {
             $output.Add($line)
-            if ($newChangeEntry) { $output.Add($newChangeEntry); $changeAdded = $true }
+            if ($newChangeEntry) { 
+                $output.Add($newChangeEntry)
+                $changeAdded = $true 
+            }
             $inChanges = $true
             continue
         }
-        if ($inChanges -and $line -match '^##\s') { $output.Add($line); $inChanges = $false; continue }
-        if ($inChanges -and $line -match '^- ') {
-            if ($existingChanges -lt 2) { $output.Add($line); $existingChanges++ }
+        
+        if ($inChanges -and $line -match '^##\s') {
+            $inChanges = $false
+            $output.Add($line)
             continue
         }
+        
+        if ($inChanges -and $line -match '^- ') {
+             if ($existingChanges -lt 2) {
+                 $output.Add($line)
+                 $existingChanges++
+             }
+             continue
+        }
+        
         if ($line -match '\*\*Last updated\*\*: .*\d{4}-\d{2}-\d{2}') {
             $output.Add(($line -replace '\d{4}-\d{2}-\d{2}',$Date.ToString('yyyy-MM-dd')))
             continue
         }
+        
+        # Skip lines if we already added tech entries and are inside the tech block (avoid duplication potential if logic was different)
+        # But here we just add the line if not special case
         $output.Add($line)
     }
 
