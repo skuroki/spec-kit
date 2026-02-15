@@ -342,8 +342,11 @@ create_new_agent_file() {
     local substitutions=(
         "s|\[PROJECT NAME\]|$project_name|"
         "s|\[DATE\]|$current_date|"
+        "s|\[すべての plan.md ファイルから抽出\]|$tech_stack|"
         "s|\[EXTRACTED FROM ALL PLAN.MD FILES\]|$tech_stack|"
+        "s|\[計画からの実際の構造\]|$project_structure|g"
         "s|\[ACTUAL STRUCTURE FROM PLANS\]|$project_structure|g"
+        "s|\[使用技術に関連するコマンドのみ\]|$commands|"
         "s|\[ONLY COMMANDS FOR ACTIVE TECHNOLOGIES\]|$commands|"
         "s|\[LANGUAGE-SPECIFIC, ONLY FOR LANGUAGES IN USE\]|$language_conventions|"
         "s|\[LAST 3 FEATURES AND WHAT THEY ADDED\]|$recent_change|"

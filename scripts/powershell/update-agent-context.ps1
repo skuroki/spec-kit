@@ -245,11 +245,17 @@ function New-AgentFile {
     }
     
     $content = $content -replace '\[EXTRACTED FROM ALL PLAN.MD FILES\]',$techStackForTemplate
+    $content = $content -replace '\[すべての plan.md ファイルから抽出\]',$techStackForTemplate
+    
     # For project structure we manually embed (keep newlines)
     $escapedStructure = [Regex]::Escape($projectStructure)
     $content = $content -replace '\[ACTUAL STRUCTURE FROM PLANS\]',$escapedStructure
+    $content = $content -replace '\[計画からの実際の構造\]',$escapedStructure
+
     # Replace escaped newlines placeholder after all replacements
     $content = $content -replace '\[ONLY COMMANDS FOR ACTIVE TECHNOLOGIES\]',$commands
+    $content = $content -replace '\[使用技術に関連するコマンドのみ\]',$commands
+
     $content = $content -replace '\[LANGUAGE-SPECIFIC, ONLY FOR LANGUAGES IN USE\]',$languageConventions
     
     # Build the recent changes string safely
