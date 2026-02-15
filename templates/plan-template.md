@@ -17,12 +17,12 @@
   するための参考として提示されています。
 -->
 
-**言語/バージョン**: [例: Python 3.11, Swift 5.9, Rust 1.75 または 明確化が必要]  
-**主要な依存関係**: [例: FastAPI, UIKit, LLVM または 明確化が必要]  
-**ストレージ**: [該当する場合、例: PostgreSQL, CoreData, files または N/A]  
+**Language/Version**: [例: Python 3.11, Swift 5.9, Rust 1.75 または 明確化が必要]  
+**Primary Dependencies**: [例: FastAPI, UIKit, LLVM または 明確化が必要]  
+**Storage**: [該当する場合、例: PostgreSQL, CoreData, files または N/A]  
 **テスト**: [例: pytest, XCTest, cargo test または 明確化が必要]  
 **ターゲットプラットフォーム**: [例: Linux server, iOS 15+, WASM または 明確化が必要]
-**プロジェクトタイプ**: [single/web/mobile - ソース構造を決定する]  
+**Project Type**: [single/web/mobile - ソース構造を決定する]  
 **パフォーマンス目標**: [ドメイン固有、例: 1000 req/s, 10k lines/sec, 60 fps または 明確化が必要]  
 **制約事項**: [ドメイン固有、例: <200ms p95, <100MB memory, オフライン対応 または 明確化が必要]  
 **規模/スコープ**: [ドメイン固有、例: 10k users, 1M LOC, 50 screens または 明確化が必要]

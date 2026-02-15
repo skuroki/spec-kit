@@ -4,17 +4,17 @@
 
 ## 使用技術 (Active Technologies)
 
-[すべての plan.md ファイルから抽出]
+[EXTRACTED FROM ALL PLAN.MD FILES]
 
 ## プロジェクト構造
 
 ```text
-[計画からの実際の構造]
+[ACTUAL STRUCTURE FROM PLANS]
 ```
 
 ## コマンド
 
-[使用技術に関連するコマンドのみ]
+[ONLY COMMANDS FOR ACTIVE TECHNOLOGIES]
 
 ## コードスタイル
 
