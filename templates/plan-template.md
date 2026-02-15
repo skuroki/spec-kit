@@ -18,7 +18,7 @@
 -->
 
 **Language/Version (言語/バージョン)**: [例: Python 3.11, Swift 5.9, Rust 1.75 または 明確化が必要]  
-**Key Dependencies (主要な依存関係)**: [例: FastAPI, UIKit, LLVM または 明確化が必要]  
+**Primary Dependencies (主要な依存関係)**: [例: FastAPI, UIKit, LLVM または 明確化が必要]  
 **Storage (ストレージ)**: [該当する場合、例: PostgreSQL, CoreData, files または N/A]  
 **Testing (テスト)**: [例: pytest, XCTest, cargo test または 明確化が必要]  
 **Target Platform (ターゲットプラットフォーム)**: [例: Linux server, iOS 15+, WASM または 明確化が必要]
