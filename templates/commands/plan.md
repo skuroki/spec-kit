@@ -53,10 +53,10 @@ $ARGUMENTS
 2. **リサーチエージェントを生成してディスパッチ**:
 
    ```text
-   For each unknown in Technical Context:
-     Task: "Research {unknown} for {feature context}"
-   For each technology choice:
-     Task: "Find best practices for {tech} in {domain}"
+   技術的コンテキスト内の各不明点について:
+     タスク: "{機能コンテキスト}のための{不明点}を調査する"
+   各技術選択について:
+     タスク: "{ドメイン}における{技術}のベストプラクティスを見つける"
    ```
 
 3. **調査結果を統合** して `research.md` に以下の形式で記述:

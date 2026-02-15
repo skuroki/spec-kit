@@ -106,40 +106,40 @@ $ARGUMENTS
     a. **仕様品質チェックリストの作成**: 以下の検証項目を含むチェックリストテンプレート構造を使用して `FEATURE_DIR/checklists/requirements.md` にチェックリストファイルを作成する:
 
       ```markdown
-      # Specification Quality Checklist: [FEATURE NAME]
+      # 仕様品質チェックリスト: [FEATURE NAME]
       
-      **Purpose**: Validate specification completeness and quality before proceeding to planning
-      **Created**: [DATE]
-      **Feature**: [Link to spec.md]
+      **目的**: 計画に進む前に仕様の完全性と品質を検証する
+      **作成日**: [DATE]
+      **機能**: [spec.md へのリンク]
       
-      ## Content Quality
+      ## コンテンツ品質
       
-      - [ ] No implementation details (languages, frameworks, APIs)
-      - [ ] Focused on using value and business needs
-      - [ ] Written for non-technical stakeholders
-      - [ ] All mandatory sections completed
+      - [ ] 実装の詳細 (言語、フレームワーク、API) が含まれていない
+      - [ ] ユーザー価値とビジネスニーズに焦点を当てている
+      - [ ] 非技術系ステークホルダー向けに書かれている
+      - [ ] すべての必須セクションが完了している
       
-      ## Requirement Completeness
+      ## 要件の完全性
       
-      - [ ] No [NEEDS CLARIFICATION] markers remain
-      - [ ] Requirements are testable and unambiguous
-      - [ ] Success criteria are measurable
-      - [ ] Success criteria are technology-agnostic (no implementation details)
-      - [ ] All acceptance scenarios are defined
-      - [ ] Edge cases are identified
-      - [ ] Scope is clearly bounded
-      - [ ] Dependencies and assumptions identified
+      - [ ] [NEEDS CLARIFICATION] マーカーが残っていない
+      - [ ] 要件がテスト可能で曖昧さがない
+      - [ ] 成功基準が測定可能である
+      - [ ] 成功基準が技術に依存していない (実装の詳細がない)
+      - [ ] すべての受け入れシナリオが定義されている
+      - [ ] エッジケースが特定されている
+      - [ ] スコープが明確に限定されている
+      - [ ] 依存関係と前提条件が特定されている
       
-      ## Feature Readiness
+      ## 機能の準備状態
       
-      - [ ] All functional requirements have clear acceptance criteria
-      - [ ] User scenarios cover primary flows
-      - [ ] Feature meets measurable outcomes defined in Success Criteria
-      - [ ] No implementation details leak into specification
+      - [ ] すべての機能要件に明確な受け入れ基準がある
+      - [ ] ユーザーシナリオが主要なフローをカバーしている
+      - [ ] 機能が成功基準で定義された測定可能な成果を満たしている
+      - [ ] 仕様に実装の詳細が漏れていない
       
-      ## Notes
+      ## ノート
       
-      - Items marked incomplete require spec updates before `/speckit.clarify` or `/speckit.plan`
+      - 未完了の項目がある場合、`/speckit.clarify` または `/speckit.plan` に進む前に仕様の更新が必要です
       ```
 
     b. **検証チェックの実行**: 各チェックリスト項目に対して仕様書をレビューする:
@@ -162,22 +162,22 @@ $ARGUMENTS
          3. 必要な明確化ごとに（最大3つ）、以下の形式でユーザーにオプションを提示する:
 
             ```markdown
-            ## Question [N]: [Topic]
+            ## 質問 [N]: [Topic]
             
-            **Context**: [Quote relevant spec section]
+            **コンテキスト**: [関連するspecセクションを引用]
             
-            **What we need to know**: [Specific question from NEEDS CLARIFICATION marker]
+            **確認事項**: [[NEEDS CLARIFICATION] マーカーからの具体的な質問]
             
-            **Suggested Answers**:
+            **回答案**:
             
-            | Option | Answer | Implications |
-            |--------|--------|--------------|
-            | A      | [First suggested answer] | [What this means for the feature] |
-            | B      | [Second suggested answer] | [What this means for the feature] |
-            | C      | [Third suggested answer] | [What this means for the feature] |
-            | Custom | Provide your own answer | [Explain how to provide custom input] |
+            | オプション | 回答 | 意味/影響 |
+            |------------|------|-----------|
+            | A          | [最初の回答案] | [機能への意味] |
+            | B          | [2番目の回答案] | [機能への意味] |
+            | C          | [3番目の回答案] | [機能への意味] |
+            | Custom     | 独自の回答を提供する | [独自の入力を提供する方法を説明] |
             
-            **Your choice**: _[Wait for user response]_
+            **あなたの選択**: _[ユーザーの回答を待つ]_
             ```
 
          4. **重要 - テーブルフォーマット**: マークダウンテーブルが適切にフォーマットされていることを確認する:
