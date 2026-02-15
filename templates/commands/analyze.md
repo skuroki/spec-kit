@@ -129,16 +129,16 @@ $ARGUMENTS
 
 ## 仕様分析レポート (Specification Analysis Report)
 
-| ID | Category | Severity | Location(s) | Summary | Recommendation |
-|----|----------|----------|-------------|---------|----------------|
+| ID | カテゴリ (Category) | 重大度 (Severity) | 場所 (Location) | 概要 (Summary) | 推奨事項 (Recommendation) |
+|----|-------------------|-------------------|-----------------|----------------|---------------------------|
 | A1 | Duplication | HIGH | spec.md:L120-134 | 2つの類似した要件 ... | 言い回しをマージ; より明確なバージョンを維持 |
 
 (発見事項ごとに1行追加; カテゴリのイニシャルをプレフィックスとした安定IDを生成)
 
-**カバレッジサマリーテーブル:**
+**カバレッジサマリーテーブル (Coverage Summary Table):**
 
-| Requirement Key | Has Task? | Task IDs | Notes |
-|-----------------|-----------|----------|-------|
+| 要件キー (Requirement Key) | タスクあり? (Has Task?) | タスクID (Task IDs) | 備考 (Notes) |
+|-------------------------|------------------------|---------------------|--------------|
 
 **憲法整合性の問題 (Constitution Alignment Issues):** (存在する場合)
 
@@ -155,11 +155,11 @@ $ARGUMENTS
 
 ### 7. 次のアクションの提示
 
-レポートの最後に、簡潔な Next Actions ブロックを出力する:
+レポートの最後に、簡潔な 「次のアクション (Next Actions)」 ブロックを出力する:
 
 - CRITICALな問題が存在する場合: `/speckit.implement` の前に解決を推奨
 - LOW/MEDIUMのみの場合: ユーザーは進めてもよいが、改善提案を提供する
-- 明示的なコマンド提案を提供する: 例: "Run /speckit.specify with refinement", "Run /speckit.plan to adjust architecture", "Manually edit tasks.md to add coverage for 'performance-metrics'"
+- 明示的なコマンド提案を提供する: 例: "`/speckit.specify` を実行して洗練させる", "`/speckit.plan` を実行してアーキテクチャを調整する", "`tasks.md` を手動編集して 'パフォーマンス指標' のカバレッジを追加する"
 
 ### 8. 修正案の提示 (Remediation)
 
